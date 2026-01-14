@@ -1,3 +1,9 @@
+## 需知
+原仓库：https://gitee.com/y_project/RuoYi/tree/springboot3/ 
+请尊重原仓库开源协议，本人使用若依作为RABC框架,二次开发来支持平台功能，主要增加了ruoyi-feign通用模块来支持远程调用
+
+
+
 <p align="center">
 	<img alt="logo" src="https://oscimg.oschina.net/oscnet/up-d3d0a9303e11d522a06cd263f3079027715.png">
 </p>
