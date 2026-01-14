@@ -1,0 +1,4 @@
+com.ruoyi.feign.config.RemoteAuthPropertiesConfiguration
+com.ruoyi.feign.config.RemoteAuthMvcConfiguration
+com.ruoyi.feign.config.RemoteAuthWebFluxConfiguration
+com.ruoyi.feign.config.FeignConfiguration

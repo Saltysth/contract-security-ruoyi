@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysRefreshTokenMapper">
+
+    <resultMap type="SysRefreshToken" id="SysRefreshTokenResult">
+        <result property="tokenId"    column="token_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="username"    column="username"    />
+        <result property="refreshToken"    column="refresh_token"    />
+        <result property="expireTime"    column="expire_time"    />
+        <result property="deviceInfo"    column="device_info"    />
+        <result property="ipAddress"    column="ip_address"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSysRefreshTokenVo">
+        select token_id, user_id, username, refresh_token, expire_time, device_info, ip_address, status, create_by, create_time, update_by, update_time, remark from sys_refresh_token
+    </sql>
+
+    <select id="selectSysRefreshTokenList" parameterType="SysRefreshToken" resultMap="SysRefreshTokenResult">
+        <include refid="selectSysRefreshTokenVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="username != null  and username != ''"> and username like concat('%', #{username}, '%')</if>
+            <if test="refreshToken != null  and refreshToken != ''"> and refresh_token = #{refreshToken}</if>
+            <if test="expireTime != null "> and expire_time = #{expireTime}</if>
+            <if test="deviceInfo != null  and deviceInfo != ''"> and device_info = #{deviceInfo}</if>
+            <if test="ipAddress != null  and ipAddress != ''"> and ip_address = #{ipAddress}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="selectSysRefreshTokenByTokenId" parameterType="Long" resultMap="SysRefreshTokenResult">
+        <include refid="selectSysRefreshTokenVo"/>
+        where token_id = #{tokenId}
+    </select>
+
+    <select id="selectSysRefreshTokenByRefreshToken" parameterType="String" resultMap="SysRefreshTokenResult">
+        <include refid="selectSysRefreshTokenVo"/>
+        where refresh_token = #{refreshToken} and status = '0' and expire_time > now()
+    </select>
+
+    <select id="selectSysRefreshTokenByUserId" parameterType="Long" resultMap="SysRefreshTokenResult">
+        <include refid="selectSysRefreshTokenVo"/>
+        where user_id = #{userId} and status = '0' and expire_time > now()
+        order by create_time desc
+    </select>
+
+    <insert id="insertSysRefreshToken" parameterType="SysRefreshToken" useGeneratedKeys="true" keyProperty="tokenId">
+        insert into sys_refresh_token
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="username != null and username != ''">username,</if>
+            <if test="refreshToken != null and refreshToken != ''">refresh_token,</if>
+            <if test="expireTime != null">expire_time,</if>
+            <if test="deviceInfo != null and deviceInfo != ''">device_info,</if>
+            <if test="ipAddress != null and ipAddress != ''">ip_address,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="username != null and username != ''">#{username},</if>
+            <if test="refreshToken != null and refreshToken != ''">#{refreshToken},</if>
+            <if test="expireTime != null">#{expireTime},</if>
+            <if test="deviceInfo != null and deviceInfo != ''">#{deviceInfo},</if>
+            <if test="ipAddress != null and ipAddress != ''">#{ipAddress},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysRefreshToken" parameterType="SysRefreshToken">
+        update sys_refresh_token
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="username != null and username != ''">username = #{username},</if>
+            <if test="refreshToken != null and refreshToken != ''">refresh_token = #{refreshToken},</if>
+            <if test="expireTime != null">expire_time = #{expireTime},</if>
+            <if test="deviceInfo != null and deviceInfo != ''">device_info = #{deviceInfo},</if>
+            <if test="ipAddress != null and ipAddress != ''">ip_address = #{ipAddress},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where token_id = #{tokenId}
+    </update>
+
+    <delete id="deleteSysRefreshTokenByTokenId" parameterType="Long">
+        delete from sys_refresh_token where token_id = #{tokenId}
+    </delete>
+
+    <delete id="deleteSysRefreshTokenByTokenIds" parameterType="String">
+        delete from sys_refresh_token where token_id in
+        <foreach item="tokenId" collection="array" open="(" separator="," close=")">
+            #{tokenId}
+        </foreach>
+    </delete>
+
+    <delete id="deleteSysRefreshTokenByUserId" parameterType="Long">
+        delete from sys_refresh_token where user_id = #{userId}
+    </delete>
+
+    <delete id="deleteExpiredRefreshTokens">
+        delete from sys_refresh_token where expire_time &lt; now()
+    </delete>
+
+    <delete id="deleteSysRefreshTokenByRefreshToken" parameterType="String">
+        delete from sys_refresh_token where refresh_token = #{refreshToken}
+    </delete>
+</mapper>
